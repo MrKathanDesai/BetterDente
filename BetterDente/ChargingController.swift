@@ -59,6 +59,8 @@ class ChargingController: ObservableObject {
     
     enum MenuBarDisplayMode: String, CaseIterable {
         case iconOnly = "Icon Only"
+        case appLogo = "App Logo"
+        case batteryNative = "Native Battery"
         case wattage = "Wattage"
         case temperature = "Temperature"
         case percentage = "Percentage"

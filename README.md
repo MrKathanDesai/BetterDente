@@ -69,6 +69,12 @@ If you prefer using the terminal to bypass the "Unverified Developer" warning:
    xattr -cr /Applications/BetterDente.app
    ```
 
+#### Method C: System Settings
+1. Open **System Settings** -> **Privacy & Security**.
+2. Scroll down to the **Security** section.
+3. You will see a message saying "BetterDente was blocked...".
+4. Click **Open Anyway** and enter your password if prompted.
+
 ---
 
 © 2026 BetterDente. Built with care for MacBook longevity.
