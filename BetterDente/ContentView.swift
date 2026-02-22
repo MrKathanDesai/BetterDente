@@ -8,7 +8,7 @@ struct ContentView: View {
         VStack(spacing: 16) {
             // Header
             HStack {
-                Text("Charge Limiter")
+                Text("BetterDente")
                     .font(.headline)
                 Spacer()
                 

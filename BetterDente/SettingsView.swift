@@ -727,7 +727,7 @@ struct SettingsView: View {
             // Schedule Tab
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("Schedules only run while the Charge Limiter app is open.")
+                    Text("Schedules only run while BetterDente is open.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.top, 8)

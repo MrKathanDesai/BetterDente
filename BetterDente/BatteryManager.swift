@@ -89,7 +89,7 @@ class BatteryManager: ObservableObject {
         // 65535 (0xFFFF) means "calculating" in ioreg, -1 means unknown
         if isFullyCharged { return "Fully Charged" }
         
-        // When plugged in but NOT charging (charge limiter active), show status only
+        // When plugged in but NOT charging (BetterDente active), show status only
         if isPluggedIn && !isCharging {
             return "Not Charging"
         }

@@ -13,10 +13,9 @@ struct BetterDenteApp: App {
                 // Main Icon logic
                 if controller.menuBarDisplayMode == .batteryNative {
                     Image(systemName: getBatterySystemName())
-                } else if controller.menuBarDisplayMode == .appLogo {
-                    Image(systemName: "bolt.shield.fill")
                 } else {
-                    Image(systemName: "bolt.battery.block.fill")
+                    // Default/App logo icon
+                    Image(systemName: "bolt.shield.fill")
                 }
                 
                 // Optional Text logic
