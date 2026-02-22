@@ -45,11 +45,29 @@ Prevent your Mac from bypassing the charge limit while asleep. BetterDente can a
 3. Launch the app and follow the prompts to install the required Helper Tool (Safe to run, requires Root permissions for SMC access).
 
 ### 🛡️ Opening for the first time
-Since BetterDente is an independent open-source project and not digitally signed by an Apple Developer account, macOS Gatekeeper may show a warning. To open it:
-1. **Right-click** (or Control-click) the `BetterDente.app` icon.
+Since BetterDente is an independent open-source project and not digitally signed by an Apple Developer account, macOS Gatekeeper may show a warning.
+
+#### Method A: The Right-Click Way (Recommended)
+1. **Right-click** (or Control-click) the `BetterDente.app` icon in your Applications folder.
 2. Select **Open** from the menu.
 3. In the dialog that appears, click **Open** again.
-4. You will only need to do this once.
+
+#### Method B: Terminal Workaround (Total Bypass)
+If you prefer using the terminal to bypass the "Unverified Developer" warning:
+1. Open **Terminal.app**.
+2. Run this code to temporarily allow unverified apps:
+   ```bash
+   sudo spctl --master-disable
+   ```
+3. Open **BetterDente.app** normally.
+4. **Crucial**: Once the app is open, re-enable your system security immediately:
+   ```bash
+   sudo spctl --master-enable
+   ```
+5. Alternatively, you can just clear the warning for this specific app:
+   ```bash
+   xattr -cr /Applications/BetterDente.app
+   ```
 
 ---
 
