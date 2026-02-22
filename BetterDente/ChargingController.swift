@@ -57,16 +57,27 @@ class ChargingController: ObservableObject {
     @AppStorage("scheduledDischargeInterval") var scheduledDischargeInterval: Int = 14 // days
     @AppStorage("lastScheduledDischarge") var lastScheduledDischarge: Double = 0.0 // timeIntervalSince1970
     
-    enum MenuBarDisplayMode: String, CaseIterable {
-        case iconOnly = "Icon Only"
-        case appLogo = "App Logo"
-        case batteryNative = "Native Battery"
-        case wattage = "Wattage"
-        case temperature = "Temperature"
-        case percentage = "Percentage"
+    enum MenuBarIconStyle: String, CaseIterable {
+        case appLogo = "BetterDente Logo"
+        case nativeBattery = "Native Battery"
+        case none = "None"
     }
-    @AppStorage("menuBarDisplayMode") var menuBarDisplayMode: MenuBarDisplayMode = .iconOnly
+    @AppStorage("menuBarIconStyle") var menuBarIconStyle: MenuBarIconStyle = .appLogo {
+        didSet { objectWillChange.send() }
+    }
     
+    @AppStorage("showMenuBarPercentage") var showMenuBarPercentage: Bool = false {
+        didSet { objectWillChange.send() }
+    }
+    @AppStorage("showMenuBarWattage") var showMenuBarWattage: Bool = false {
+        didSet { objectWillChange.send() }
+    }
+    @AppStorage("showMenuBarTemperature") var showMenuBarTemperature: Bool = false {
+        didSet { objectWillChange.send() }
+    }
+    
+    // Legacy support or fallback
+
     // App Exceptions
     @AppStorage("appExceptionsList") var appExceptionsList: String = "" // Comma-separated app names
     @Published var isExceptionAppActive: Bool = false

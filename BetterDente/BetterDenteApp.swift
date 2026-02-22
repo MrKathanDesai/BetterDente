@@ -10,24 +10,26 @@ struct BetterDenteApp: App {
                 .environmentObject(controller)
         } label: {
             HStack(spacing: 4) {
-                // Main Icon logic
-                if controller.menuBarDisplayMode == .batteryNative {
+                // 1. Icon Style
+                switch controller.menuBarIconStyle {
+                case .appLogo:
+                    Image("MenuBarIcon") // Our custom template icon
+                        .renderingMode(.template)
+                case .nativeBattery:
                     Image(systemName: getBatterySystemName())
-                } else {
-                    // Default/App logo icon
-                    Image(systemName: "bolt.shield.fill")
+                case .none:
+                    EmptyView()
                 }
                 
-                // Optional Text logic
-                switch controller.menuBarDisplayMode {
-                case .iconOnly, .appLogo, .batteryNative:
-                    EmptyView()
-                case .wattage:
-                    Text("\(String(format: "%.1f", abs(controller.batteryManager.wattage)))W")
-                case .temperature:
-                    Text("\(String(format: "%.1f", controller.batteryManager.temperature))°C")
-                case .percentage:
+                // 2. Multi-Stat Display
+                if controller.showMenuBarPercentage {
                     Text("\(controller.batteryManager.currentPercentage)%")
+                }
+                if controller.showMenuBarWattage {
+                    Text("\(String(format: "%.1f", abs(controller.batteryManager.wattage)))W")
+                }
+                if controller.showMenuBarTemperature {
+                    Text("\(String(format: "%.1f", controller.batteryManager.temperature))°C")
                 }
             }
         }
@@ -43,17 +45,20 @@ struct BetterDenteApp: App {
         let level = controller.batteryManager.currentPercentage
         let isCharging = controller.batteryManager.isCharging
         
+        // Match macOS native battery segments
         if isCharging {
-            if level >= 95 { return "battery.100.bolt" }
+            if level >= 100 { return "battery.100.bolt" }
             if level >= 75 { return "battery.75.bolt" }
             if level >= 50 { return "battery.50.bolt" }
-            return "battery.25.bolt"
+            if level >= 25 { return "battery.25.bolt" }
+            return "battery.0.bolt"
         } else {
-            if level >= 95 { return "battery.100" }
+            if level >= 100 { return "battery.100" }
             if level >= 75 { return "battery.75" }
             if level >= 50 { return "battery.50" }
             if level >= 25 { return "battery.25" }
-            return "battery.0"
+            if level >= 10 { return "battery.0" }
+            return "battery.0" // low battery matches empty
         }
     }
 }

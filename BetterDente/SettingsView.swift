@@ -113,19 +113,38 @@ struct SettingsView: View {
                     }
                     
                     // Menu Bar Customization
-                    GroupBox(label: Text("Menu Bar Display").font(.headline)) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Customize what appears next to the battery icon in your Mac's menu bar.")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            
-                            Picker("Display Mode", selection: $controller.menuBarDisplayMode) {
-                                ForEach(ChargingController.MenuBarDisplayMode.allCases, id: \.self) { mode in
-                                    Text(mode.rawValue).tag(mode)
+                    GroupBox(label: Text("Menu Bar Customization").font(.headline)) {
+                        VStack(alignment: .leading, spacing: 16) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Icon Style")
+                                    .font(.subheadline)
+                                    .bold()
+                                Picker("Icon Style", selection: $controller.menuBarIconStyle) {
+                                    ForEach(ChargingController.MenuBarIconStyle.allCases, id: \.self) { style in
+                                        Text(style.rawValue).tag(style)
+                                    }
                                 }
+                                .pickerStyle(SegmentedPickerStyle())
+                                .labelsHidden()
                             }
-                            .labelsHidden()
-                            .pickerStyle(SegmentedPickerStyle())
+                            
+                            Divider()
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Extra Information")
+                                    .font(.subheadline)
+                                    .bold()
+                                Text("Show these real-time stats alongside your chosen icon.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                
+                                HStack(spacing: 20) {
+                                    Toggle("Percentage", isOn: $controller.showMenuBarPercentage)
+                                    Toggle("Wattage", isOn: $controller.showMenuBarWattage)
+                                    Toggle("Temperature", isOn: $controller.showMenuBarTemperature)
+                                }
+                                .toggleStyle(.checkbox)
+                            }
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
