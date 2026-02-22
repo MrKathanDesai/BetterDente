@@ -10,23 +10,20 @@ struct BetterDenteApp: App {
                 .environmentObject(controller)
         } label: {
             HStack(spacing: 4) {
-                // 1. Icon Style
-                switch controller.menuBarIconStyle {
-                case .nativeBattery:
+                // 1. Icon
+                if controller.menuBarIconStyle == .nativeBattery {
                     Image(systemName: getBatterySystemName())
-                case .none:
-                    EmptyView()
                 }
                 
-                // 2. Multi-Stat Display
-                if controller.showMenuBarPercentage {
-                    Text("\(controller.batteryManager.currentPercentage)%")
-                }
-                if controller.showMenuBarWattage {
-                    Text("\(String(format: "%.1f", abs(controller.batteryManager.wattage)))W")
-                }
-                if controller.showMenuBarTemperature {
-                    Text("\(String(format: "%.1f", controller.batteryManager.temperature))°C")
+                // 2. Stats String (Flattened for stability)
+                let statsString = [
+                    controller.showMenuBarPercentage ? "\(controller.batteryManager.currentPercentage)%" : nil,
+                    controller.showMenuBarWattage ? "\(String(format: "%.1f", abs(controller.batteryManager.wattage)))W" : nil,
+                    controller.showMenuBarTemperature ? "\(String(format: "%.1f", controller.batteryManager.temperature))°C" : nil
+                ].compactMap { $0 }.joined(separator: " ")
+                
+                if !statsString.isEmpty {
+                    Text(statsString)
                 }
             }
         }

@@ -30,6 +30,12 @@ class ServiceManager {
         } as? BetterDenteXPCProtocol
     }
     
+    func isHelperAvailable(completion: @escaping (Bool) -> Void) {
+        getProxy()?.enableCharging { success in
+            completion(success)
+        }
+    }
+    
     func installDaemon() {
         if #available(macOS 13.0, *) {
             let service = SMAppService.daemon(plistName: "com.betterdente.BetterDenteHelper.plist")
@@ -38,9 +44,10 @@ class ServiceManager {
                     logger.warning("Daemon requires user approval in Settings.")
                 }
                 try service.register()
-                logger.notice("Successfully registered daemon.")
+                logger.notice("Successfully registered daemon. status: \(service.status.rawValue)")
             } catch {
                 logger.error("Failed to register daemon: \(error.localizedDescription, privacy: .public)")
+                // Fallback to old path if needed? No, SMAppService is preferred on Ventura+
             }
         } else {
             logger.error("macOS 13.0 or later is required for SMAppService")

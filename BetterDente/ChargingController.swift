@@ -104,6 +104,9 @@ class ChargingController: ObservableObject {
         case calibrating = "Calibrating"
     }
     init() {
+        // Ensure the helper is installed on launch so permissions are requested
+        ServiceManager.shared.installDaemon()
+        
         // Forward objectWillChange from nested observable objects so SwiftUI redraws immediately
         batteryManager.objectWillChange
             .receive(on: DispatchQueue.main)
