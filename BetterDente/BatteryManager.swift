@@ -148,12 +148,12 @@ class BatteryManager: ObservableObject {
             let pmsetOutput = self.executeCommand("/usr/bin/pmset", arguments: ["-g", "batt"])
             let ioregOutput = self.executeCommand("/usr/sbin/ioreg", arguments: ["-r", "-n", "AppleSmartBattery"])
             
-            // Update top energy apps every 10 seconds (every 10th call at 1s polling)
+            // Update top energy apps every 10 seconds (every 5th call at 2s polling)
             var topAppsOutput: String? = nil
             self.topAppUpdateCounter += 1
-            if self.topAppUpdateCounter >= 20 {
+            if self.topAppUpdateCounter >= 5 {
                 self.topAppUpdateCounter = 0
-                topAppsOutput = self.executeCommand("/usr/bin/top", arguments: ["-l", "1", "-n", "5", "-o", "cpu", "-stats", "pid,command,cpu"])
+                topAppsOutput = self.executeCommand("/usr/bin/top", arguments: ["-l", "2", "-n", "10", "-stats", "command,cpu,power", "-o", "power"])
             }
             
             DispatchQueue.main.async {
@@ -224,12 +224,17 @@ class BatteryManager: ObservableObject {
     }
     
     private func parseTopApps(output: String) {
-        let lines = output.components(separatedBy: .newlines)
+        // top -l 2 produces two samples. We only care about the second one.
+        let samples = output.components(separatedBy: "Processes:")
+        guard samples.count >= 3 else { return } // sample 0 is header, 1 is first data, 2 is second data
+        
+        let targetSample = samples.last ?? ""
+        let lines = targetSample.components(separatedBy: .newlines)
         var apps: [TopEnergyApp] = []
         var foundHeader = false
         
         for line in lines {
-            if line.contains("PID") && line.contains("COMMAND") {
+            if line.contains("COMMAND") && line.contains("POWER") {
                 foundHeader = true
                 continue
             }
@@ -237,19 +242,42 @@ class BatteryManager: ObservableObject {
                 let trimmed = line.trimmingCharacters(in: .whitespaces)
                 guard !trimmed.isEmpty else { continue }
                 
-                // Parse: PID   COMMAND   %CPU
+                // Parse: COMMAND   %CPU   POWER
+                // Note: top output can be tricky with spaces in COMMAND, but usually it's fixed width or space-padded
                 let parts = trimmed.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
+                
+                // If power is the last column
                 if parts.count >= 3 {
-                    let name = parts[1]
-                    let cpuStr = parts.last ?? "0"
-                    let cpu = Double(cpuStr) ?? 0.0
-                    if cpu > 0.1 {
+                    let powerStr = parts.last ?? "0"
+                    let power = Double(powerStr) ?? 0.0
+                    
+                    // Reconstruct command name (could have spaces)
+                    // Since we have command, cpu, power as our stats:
+                    // parts: [Name, CPU, Power]
+                    // If Name has spaces, parts would be [NamePart1, NamePart2, CPU, Power]
+                    let name: String
+                    let cpu: Double
+                    if parts.count == 3 {
+                        name = parts[0]
+                        cpu = Double(parts[1]) ?? 0.0
+                    } else {
+                        // Reconstruct name from all parts except last two
+                        name = parts.dropLast(2).joined(separator: " ")
+                        cpu = Double(parts[parts.count - 2]) ?? 0.0
+                    }
+                    
+                    // Only show apps using "Significant" energy (power > 1.0)
+                    if power > 1.0 {
                         apps.append(TopEnergyApp(name: name, cpuPercent: cpu))
                     }
                 }
             }
         }
-        topEnergyApps = apps
+        
+        // Sort by power implicit in 'top' but let's just update
+        DispatchQueue.main.async {
+            self.topEnergyApps = apps
+        }
     }
     
     private func parseHardwareStats(output: String) {

@@ -196,15 +196,15 @@ class ChargingController: ObservableObject {
         }
         
         timer?.cancel()
-        timer = Timer.publish(every: 0.5, on: .main, in: .common)
+        timer = Timer.publish(every: 2.0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 
-                // Fetch macOS health every 60 seconds (system_profiler is slow)
-                // At 0.5s polling, 120 ticks = 60 seconds
+                // Fetch macOS health every 60 seconds
+                // At 2.0s polling, 30 ticks = 60 seconds
                 self.healthFetchCounter += 1
-                if self.healthFetchCounter >= 120 {
+                if self.healthFetchCounter >= 30 {
                     self.healthFetchCounter = 0
                     self.batteryManager.fetchMacOSHealth()
                 }
