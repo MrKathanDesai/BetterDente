@@ -44,6 +44,13 @@ Prevent your Mac from bypassing the charge limit while asleep. BetterDente can a
 2. Drag `BetterDente.app` to your Applications folder.
 3. Launch the app and follow the prompts to install the required Helper Tool (Safe to run, requires Root permissions for SMC access).
 
+### 🛡️ Opening for the first time
+Since BetterDente is an independent open-source project and not digitally signed by an Apple Developer account, macOS Gatekeeper may show a warning. To open it:
+1. **Right-click** (or Control-click) the `BetterDente.app` icon.
+2. Select **Open** from the menu.
+3. In the dialog that appears, click **Open** again.
+4. You will only need to do this once.
+
 ---
 
-© 2026 Kathan Desai. Built with care for MacBook longevity.
+© 2026 BetterDente. Built with care for MacBook longevity.
