@@ -56,13 +56,11 @@ class ChargingController: ObservableObject {
     @AppStorage("isScheduledDischargeEnabled") var isScheduledDischargeEnabled: Bool = false
     @AppStorage("scheduledDischargeInterval") var scheduledDischargeInterval: Int = 14 // days
     @AppStorage("lastScheduledDischarge") var lastScheduledDischarge: Double = 0.0 // timeIntervalSince1970
-    
     enum MenuBarIconStyle: String, CaseIterable {
-        case appLogo = "BetterDente Logo"
         case nativeBattery = "Native Battery"
         case none = "None"
     }
-    @AppStorage("menuBarIconStyle") var menuBarIconStyle: MenuBarIconStyle = .appLogo {
+    @AppStorage("menuBarIconStyle") var menuBarIconStyle: MenuBarIconStyle = .nativeBattery {
         didSet { objectWillChange.send() }
     }
     
@@ -207,6 +205,13 @@ class ChargingController: ObservableObject {
                 if self.healthFetchCounter >= 30 {
                     self.healthFetchCounter = 0
                     self.batteryManager.fetchMacOSHealth()
+                }
+                
+                // Re-enforce charge limit if system is overriding us
+                // If we are in 'disabled' (Bypass) state but system says we are still charging
+                if self.activeState == .disabled && self.batteryManager.isCharging {
+                    print("Re-enforcing AC Bypass as system is still charging...")
+                    ServiceManager.shared.testDisableCharging()
                 }
                 
                 self.batteryManager.updateStatus {

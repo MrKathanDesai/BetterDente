@@ -255,16 +255,18 @@ class BatteryManager: ObservableObject {
                     // Since we have command, cpu, power as our stats:
                     // parts: [Name, CPU, Power]
                     // If Name has spaces, parts would be [NamePart1, NamePart2, CPU, Power]
-                    let name: String
+                    let rawName: String
                     let cpu: Double
                     if parts.count == 3 {
-                        name = parts[0]
+                        rawName = parts[0]
                         cpu = Double(parts[1]) ?? 0.0
                     } else {
                         // Reconstruct name from all parts except last two
-                        name = parts.dropLast(2).joined(separator: " ")
+                        rawName = parts.dropLast(2).joined(separator: " ")
                         cpu = Double(parts[parts.count - 2]) ?? 0.0
                     }
+                    
+                    let name = cleanAppName(rawName)
                     
                     // Only show apps using "Significant" energy (power > 1.0)
                     if power > 1.0 {
@@ -278,6 +280,42 @@ class BatteryManager: ObservableObject {
         DispatchQueue.main.async {
             self.topEnergyApps = apps
         }
+    }
+    
+    private func cleanAppName(_ name: String) -> String {
+        var clean = name
+        
+        // Remove common suffixes
+        let suffixes = [" Helper", " Helper (Renderer)", " Helper (GPU)", " Helper (Plugin)", " Web Content", " (Renderer)", " (GPU)"]
+        for suffix in suffixes {
+            if clean.hasSuffix(suffix) {
+                clean = String(clean.dropLast(suffix.count))
+            }
+        }
+        
+        // Handle common truncated names and mappings
+        let mapping: [String: String] = [
+            "Google Chrome He": "Google Chrome",
+            "BetterDente": "BetterDente",
+            "WindowServer": "System (Graphics)",
+            "kernel_task": "System (Kernel)",
+            "com.apple.Safari": "Safari",
+            "Figma Helper": "Figma",
+            "language_server_": "Code Analysis",
+            "UniversalControl": "Universal Control",
+            "AppCleaner Smart": "AppCleaner",
+            "Arc Helper": "Arc"
+        ]
+        
+        if let mapped = mapping[name] { return mapped }
+        if let mapped = mapping[clean] { return mapped }
+        
+        // If it still looks like a bundle ID or truncated path, try to clean it
+        if clean.contains("com.apple.") {
+            return clean.components(separatedBy: ".").last ?? clean
+        }
+        
+        return clean
     }
     
     private func parseHardwareStats(output: String) {

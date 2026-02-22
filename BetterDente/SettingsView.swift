@@ -131,10 +131,10 @@ struct SettingsView: View {
                             Divider()
                             
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Extra Information")
+                                Text("Menu Bar Stats")
                                     .font(.subheadline)
                                     .bold()
-                                Text("Show these real-time stats alongside your chosen icon.")
+                                Text("Display real-time battery insights alongside the icon.")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 

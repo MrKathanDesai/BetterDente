@@ -12,9 +12,6 @@ struct BetterDenteApp: App {
             HStack(spacing: 4) {
                 // 1. Icon Style
                 switch controller.menuBarIconStyle {
-                case .appLogo:
-                    Image("MenuBarIcon") // Our custom template icon
-                        .renderingMode(.template)
                 case .nativeBattery:
                     Image(systemName: getBatterySystemName())
                 case .none:
