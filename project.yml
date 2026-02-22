@@ -1,6 +1,6 @@
 name: BetterDente
 options:
-  bundleIdPrefix: com.kathandesai
+  bundleIdPrefix: com.betterdente
   developmentLanguage: en
 targets:
   BetterDente:
@@ -16,7 +16,7 @@ targets:
       path: BetterDente/Info.plist
       properties:
         LSUIElement: true
-        NSHumanReadableCopyright: "© 2026 Kathan Desai"
+        NSHumanReadableCopyright: "© 2026 BetterDente"
     dependencies:
       - target: BetterDenteHelper
         embed: true
@@ -24,7 +24,7 @@ targets:
       - name: Copy LaunchDaemon Plist
         script: |
           mkdir -p "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Library/LaunchDaemons"
-          cp "BetterDente/com.kathandesai.BetterDenteHelper.plist" "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Library/LaunchDaemons/"
+          cp "BetterDente/com.betterdente.BetterDenteHelper.plist" "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Library/LaunchDaemons/"
 
   BetterDenteHelper:
     type: tool
@@ -36,4 +36,4 @@ targets:
     info:
       path: BetterDenteHelper/Info.plist
       properties:
-        NSHumanReadableCopyright: "© 2026 Kathan Desai"
+        NSHumanReadableCopyright: "© 2026 BetterDente"

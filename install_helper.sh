@@ -11,8 +11,8 @@ echo "Installing BetterDente Privileged Helper Tool..."
 APP_DIR="/Users/kathandesai/.gemini/antigravity/scratch/BetterDenteApp/BetterDente.app"
 HELPER_BIN="$APP_DIR/Contents/Resources/BetterDenteHelper"
 
-TARGET_BIN="/Library/PrivilegedHelperTools/com.kathandesai.BetterDenteHelper"
-TARGET_PLIST="/Library/LaunchDaemons/com.kathandesai.BetterDenteHelper.plist"
+TARGET_BIN="/Library/PrivilegedHelperTools/com.betterdente.BetterDenteHelper"
+TARGET_PLIST="/Library/LaunchDaemons/com.betterdente.BetterDenteHelper.plist"
 
 if [ ! -d "$APP_DIR" ]; then
     echo "Error: BetterDente.app not found in the scratch directory."
@@ -43,14 +43,14 @@ cat << EOF > "$TARGET_PLIST"
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.kathandesai.BetterDenteHelper</string>
+    <string>com.betterdente.BetterDenteHelper</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Library/PrivilegedHelperTools/com.kathandesai.BetterDenteHelper</string>
+        <string>/Library/PrivilegedHelperTools/com.betterdente.BetterDenteHelper</string>
     </array>
     <key>MachServices</key>
     <dict>
-        <key>com.kathandesai.BetterDenteHelper</key>
+        <key>com.betterdente.BetterDenteHelper</key>
         <true/>
     </dict>
     <key>RunAtLoad</key>

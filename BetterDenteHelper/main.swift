@@ -92,7 +92,7 @@ class BetterDenteHelper: NSObject, BetterDenteXPCProtocol {
 }
 
 let delegate = BetterDenteHelperDelegate()
-let listener = NSXPCListener(machServiceName: "com.kathandesai.BetterDenteHelper")
+let listener = NSXPCListener(machServiceName: "com.betterdente.BetterDenteHelper")
 listener.delegate = delegate
 listener.resume()
 

@@ -2,7 +2,7 @@ import Foundation
 import ServiceManagement
 import os.log
 
-let logger = Logger(subsystem: "com.kathandesai.BetterDente", category: "ServiceManager")
+let logger = Logger(subsystem: "com.betterdente.BetterDente", category: "ServiceManager")
 
 class ServiceManager {
     static let shared = ServiceManager()
@@ -11,7 +11,7 @@ class ServiceManager {
     
     private func getProxy() -> BetterDenteXPCProtocol? {
         if connection == nil {
-            let conn = NSXPCConnection(machServiceName: "com.kathandesai.BetterDenteHelper", options: .privileged)
+            let conn = NSXPCConnection(machServiceName: "com.betterdente.BetterDenteHelper", options: .privileged)
             conn.remoteObjectInterface = NSXPCInterface(with: BetterDenteXPCProtocol.self)
             conn.invalidationHandler = { [weak self] in
                 logger.warning("XPC connection invalidated. Will reconnect on next call.")
@@ -32,7 +32,7 @@ class ServiceManager {
     
     func installDaemon() {
         if #available(macOS 13.0, *) {
-            let service = SMAppService.daemon(plistName: "com.kathandesai.BetterDenteHelper.plist")
+            let service = SMAppService.daemon(plistName: "com.betterdente.BetterDenteHelper.plist")
             do {
                 if service.status == .requiresApproval {
                     logger.warning("Daemon requires user approval in Settings.")

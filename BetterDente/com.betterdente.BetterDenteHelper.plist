@@ -3,12 +3,12 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.kathandesai.BetterDenteHelper</string>
+    <string>com.betterdente.BetterDenteHelper</string>
     <key>BundleProgram</key>
     <string>Contents/MacOS/BetterDenteHelper</string>
     <key>MachServices</key>
     <dict>
-        <key>com.kathandesai.BetterDenteHelper</key>
+        <key>com.betterdente.BetterDenteHelper</key>
         <true/>
     </dict>
 </dict>
