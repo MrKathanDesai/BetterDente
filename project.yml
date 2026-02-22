@@ -1,0 +1,39 @@
+name: BetterDente
+options:
+  bundleIdPrefix: com.kathandesai
+  developmentLanguage: en
+targets:
+  BetterDente:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources: 
+      - BetterDente
+      - Shared
+    settings:
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    info:
+      path: BetterDente/Info.plist
+      properties:
+        LSUIElement: true
+        NSHumanReadableCopyright: "© 2026 Kathan Desai"
+    dependencies:
+      - target: BetterDenteHelper
+        embed: true
+    postBuildScripts:
+      - name: Copy LaunchDaemon Plist
+        script: |
+          mkdir -p "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Library/LaunchDaemons"
+          cp "BetterDente/com.kathandesai.BetterDenteHelper.plist" "$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/Library/LaunchDaemons/"
+
+  BetterDenteHelper:
+    type: tool
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources: 
+      - BetterDenteHelper
+      - Shared
+    info:
+      path: BetterDenteHelper/Info.plist
+      properties:
+        NSHumanReadableCopyright: "© 2026 Kathan Desai"

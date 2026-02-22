@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+
+# Xcode
+build/
+DerivedData/
+*.xcodeproj
+*.xcworkspace
+!default.xcworkspace
+*.xcuserdata
+*.xccheckout
+*.xcscmblueprint
+*.xccheckpoint
+*.sublime-project
+*.sublime-workspace
+*.tmproj
+*.tmproject.tmbundle
+
+# Binary artifacts
+BetterDente.app
+BetterDente-V2.dmg
+
+# Test files
+test_battery.swift
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Local configuration
+.env
